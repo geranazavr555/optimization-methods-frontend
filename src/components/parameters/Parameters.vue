@@ -1,7 +1,7 @@
 <template>
     <div>
         <label :for="$id('method')">Метод:</label>
-        <select id="$id('method')" v-model="method" @change="onChangeParams">
+        <select :id="$id('method')" v-model="method" @change="onChangeParams">
             <option value="dichotomy" selected>Дихотомия</option>
             <option value="goldenRatio">Золотое сечение</option>
             <option value="fibonacci">Фибоначчи</option>

@@ -15,11 +15,11 @@
 export default {
     name: "SummaryResults",
 
-    props: ["fmin", "xmin"],
+    props: ["fmin", "xmin", "floatPrettier"],
 
     methods: {
         naWrap: function (value) {
-            return (value === null || value === undefined) ? "N/A" : value;
+            return (value === null || value === undefined) ? "N/A" : this.floatPrettier(value);
         }
     }
 }

@@ -8,9 +8,9 @@
         <div class="parameter">
             <label>Границы:</label>
             <label :for="$id('left')">от</label>
-            <input v-model="left" v-on:change="onChangeParams" :id="$id('left')" type="number"/>
+            <input v-model="left" v-on:change="onChangeParams" :id="$id('left')"/>
             <label :for="$id('right')">до</label>
-            <input v-model="right"  v-on:change="onChangeParams" :id="$id('right')" type="number"/>
+            <input v-model="right"  v-on:change="onChangeParams" :id="$id('right')"/>
         </div>
     </div>
 </template>

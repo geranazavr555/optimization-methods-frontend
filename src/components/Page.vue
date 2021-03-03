@@ -1,8 +1,8 @@
 <template>
     <div class="page">
         <Parameters :initParams="getInitParams"/>
-        <input type="button" @click.prevent="run" value="Поехали!"/>
-        <Results/>
+        <input type="button" @click.prevent="run" value="Поїхали!"/>
+        <Results :eps="eps"/>
     </div>
 </template>
 
