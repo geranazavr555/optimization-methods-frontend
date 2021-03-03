@@ -4,12 +4,12 @@
 
         <div class="parameter">
             <label :for="$id('eps')">Eps:</label>
-            <input v-model="eps" v-on:change="onChangeParams" :id="$id('eps')" type="number"/>
+            <input v-model="eps" v-on:change="onChangeParams" :id="$id('eps')"/>
         </div>
 
         <div class="parameter">
             <label :for="$id('delta')">Delta:</label>
-            <input v-model="delta" v-on:change="onChangeParams"  :id="$id('delta')" type="number"/>
+            <input v-model="delta" v-on:change="onChangeParams"  :id="$id('delta')"/>
         </div>
     </div>
 </template>

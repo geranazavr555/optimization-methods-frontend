@@ -4,7 +4,7 @@
 
         <div class="parameter">
             <label :for="$id('eps')">Eps:</label>
-            <input v-model="eps" :id="$id('eps')" type="number"/>
+            <input v-model="eps" :id="$id('eps')"/>
         </div>
     </div>
 </template>
@@ -26,6 +26,14 @@ export default {
     beforeMount() {
         this.onChangeParams();
     },
+
+    methods: {
+        onChangeParams: function () {
+            this.$root.$emit("paramsChanged", {
+                eps: this.eps
+            });
+        }
+    }
 }
 </script>
 
