@@ -3,9 +3,11 @@
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: "CanvasView",
-        props: ["width", "height", "fromX", "toX"],
+        props: ["width", "height", "fromX", "toX", "floatPrettier"],
 
         data() {
             return {
@@ -60,13 +62,24 @@
                 this.toY = maxY + delta / 2.0;
             },
             renderFunction(canvas) {
+                this.renderByPoints(canvas, this.points, false);
+            },
+            renderByPoints(canvas, points, color) {
+                // console.log(points);
                 const context = canvas.getContext("2d");
+
+                if (color === true) {
+                    context.strokeStyle = "Red";
+                }
+
                 context.beginPath();
                 context.moveTo(this.x(0), this.y(0));
-                for (const point of this.points) {
+                for (const point of points) {
                     context.lineTo(this.x(point.x), this.y(point.y));
                 }
                 context.stroke();
+
+                context.strokeStyle = "Black";
             },
             renderAxes(canvas) {
                 let context = canvas.getContext("2d");
@@ -88,6 +101,42 @@
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 this.renderFunction(canvas);
                 this.renderAxes(canvas);
+            },
+            drawBound(x) {
+                const canvas = document.getElementById(this.$id('canvas'));
+                const context = canvas.getContext("2d");
+
+                context.beginPath();
+                context.moveTo(this.x(x), this.y(-1000));
+                context.lineTo(this.x(x), this.y(1000));
+                context.stroke();
+            },
+            drawPoint(x, y) {
+                const canvas = document.getElementById(this.$id('canvas'));
+                const context = canvas.getContext("2d");
+
+                context.beginPath();
+                context.arc(this.x(x), this.y(y), 2, 0, Math.PI * 2, true);
+                context.stroke();
+            },
+            drawParabola(a, b, c) {
+                const canvas = document.getElementById(this.$id('canvas'));
+                const func = `(${this.floatPrettier(a)}) * x * x + (${this.floatPrettier(b)}) * x + (${this.floatPrettier(c)})`;
+
+                axios.post("/plot", {
+                    function: func,
+                    from: this.fromX,
+                    to: this.toX,
+                    stepDelta: (this.toX - this.fromX) / 500
+                }).then(response => {
+                    if (response.status === 200) {
+                        this.renderByPoints(canvas, response.data, true);
+                    } else {
+                        console.error(response);
+                    }
+                }).catch(error => {
+                    console.error(error);
+                });
             }
         },
 
@@ -103,6 +152,11 @@
                 this.rawPoints = points;
                 this.render();
             });
+
+            this.$root.$on("rerender", () => this.render());
+            this.$root.$on("canvasDrawBoundX", (x) => this.drawBound(x));
+            this.$root.$on("canvasDrawPointXY", (x, y) => this.drawPoint(x, y));
+            this.$root.$on("canvasDrawParabolaABC", (a, b, c) => this.drawParabola(a, b, c));
         },
 
         mounted() {

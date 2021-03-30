@@ -1,7 +1,14 @@
 <template>
     <div class="results">
-        <SummaryResults :fmin="fmin" :xmin="xmin" :floatPrettier="floatPrettier"/>
-        <CanvasView :width="500" :height="500" :from-x="fromX" :to-x="toX" />
+        <div>
+            <div class="hor">
+                <SummaryResults :fmin="fmin" :xmin="xmin" :floatPrettier="floatPrettier"/>
+            </div>
+            <div class="hor">
+                <StepNavigator :steps="steps" :method="method"/>
+            </div>
+        </div>
+        <CanvasView :width="500" :height="500" :from-x="fromX" :to-x="toX" :floatPrettier="floatPrettier"/>
         <StepsTable :steps="steps" :floatPrettier="floatPrettier"/>
     </div>
 </template>
@@ -10,9 +17,10 @@
 import SummaryResults from "@/components/results/SummaryResults";
 import CanvasView from "@/components/results/CanvasView";
 import StepsTable from "@/components/results/StepsTable";
+import StepNavigator from "@/components/results/stepsview/StepNavigator";
 export default {
     name: "Results",
-    components: {CanvasView, SummaryResults, StepsTable},
+    components: {StepNavigator, CanvasView, SummaryResults, StepsTable},
     props: ["eps"],
 
     data: function () {
@@ -21,7 +29,8 @@ export default {
             xmin: null,
             fromX: 0,
             toX: 0,
-            steps: []
+            steps: [],
+            method: "dichotomy"
         }
     },
 
@@ -51,6 +60,9 @@ export default {
             if (params.right !== undefined) {
                 this.toX = parseFloat(params.right);
             }
+            if (params.method !== undefined) {
+                this.method = params.method;
+            }
         });
 
         this.$root.$on("resultsChanged", results => {
@@ -65,5 +77,10 @@ export default {
 <style scoped>
     .results {
         margin-top: 1rem;
+    }
+
+    .hor {
+        display: inline-block;
+        margin-left: 3em;
     }
 </style>
